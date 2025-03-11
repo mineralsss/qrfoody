@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocalStorageValue } from '@react-hookz/web';
 import Popup from 'reactjs-popup';
 import './Landing.css';
 import { Slide } from 'react-slideshow-image';
@@ -17,6 +18,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { styled as muiStyled } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
+import { useNavigate } from 'react-router-dom'; 
 
 
 
@@ -41,12 +43,19 @@ const StyledBadge = muiStyled(Badge)(({ theme }) => ({
 }));
 
 const CartButton = ({ itemCount }) => {
+  const navigate = useNavigate();
+  
+  const handleCartClick = () => {
+    navigate('/checkout'); // Navigate to checkout page
+  };
+  
   return (
     <Fab 
       color="primary" 
       aria-label="cart"
       className="cart-button"
       size="medium"
+      onClick={handleCartClick} // Add click handler
       sx={{
         position: 'fixed',
         bottom: 16,
@@ -65,6 +74,17 @@ const CartButton = ({ itemCount }) => {
 const ControlledPopup = ({ menuFood, menuDetail, menuName, price, addToCart }) => {
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
+  
+  // Create an item object to add to cart
+  const handleAddToCart = () => {
+    addToCart({
+      name: menuName,
+      imageUrl: menuFood,
+      price: price,
+      description: menuDetail
+    });
+  };
+  
   return (
     <div className="food-item-container">
       <button type="button" className="food-button" onClick={() => setOpen(o => !o)}>
@@ -79,19 +99,18 @@ const ControlledPopup = ({ menuFood, menuDetail, menuName, price, addToCart }) =
       <Button 
         variant="contained" 
         color="primary"
-        size = "small"
+        size="small"
         className="price-button"
-        onClick = {addToCart}
+        onClick={handleAddToCart}
         sx={{ 
           mt: 1,
-          maxWidth: '70%',  // Control the width
-          alignSelf: 'center', // Center the button
-          fontSize: '0.85rem', // Smaller font size
-          py: 0.5, // Reduce padding on top and bottom
+          maxWidth: '70%',
+          alignSelf: 'center',
+          fontSize: '0.85rem',
+          py: 0.5,
         }}
       >
         {price.toLocaleString('de-DE')} vnd
-      
       </Button>
       <Popup open={open} closeOnDocumentClick onClose={closeModal}>
         <div className="modal">
@@ -110,7 +129,7 @@ const ControlledPopup = ({ menuFood, menuDetail, menuName, price, addToCart }) =
               variant="contained"
               color="primary"
               size="small"
-              onClick={addToCart}
+              onClick={handleAddToCart}
               sx={{ mt: 2 }}
             >{price.toLocaleString('de-DE')} vnd</Button>
           </div>
@@ -136,7 +155,7 @@ function ResponsiveGrid({menuItems, addToCart}) {
               menuDetail={item.description}
               menuName={item.name}
               price={item.price}
-              addToCart={addToCart}
+              addToCart={() => addToCart(item)}
             />
           </Grid>
         ))}
@@ -199,10 +218,62 @@ const mainApp = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [selectedSlide, setSelectedSlide] = useState(0);
     const [autoplay, setAutoplay] = useState(true);
-    const [cartItemCount, setCartItemCount] = useState(0);
-    const addToCart = () => {
-      setCartItemCount(prevCount => prevCount + 1);
+    
+    // Replace this line:
+    // const [cart, setCart] = useLocalStorage('cart', []);
+    
+    // With this:
+    const cartState = useLocalStorageValue('cart', {
+      defaultValue: [],
+      initializeWithValue: true,
+    });
+    const cart = cartState.value;
+    const setCart = cartState.set;
+    // Get cart count from cart items (no changes needed here)
+    const cartItemCount = Array.isArray(cart) ? cart.reduce((total, item) => total + item.quantity, 0) : 0;
+    
+    // Enhanced addToCart function
+    const addToCart = (item) => {
+      setCart(currentCart => {
+        // Ensure currentCart is an array
+        const safeCart = Array.isArray(currentCart) ? currentCart : [];
+        
+        // Check if item already exists in cart
+        const existingItemIndex = safeCart.findIndex(
+          cartItem => cartItem.name === item.name
+        );
+        
+        if (existingItemIndex >= 0) {
+          // If item exists, increase quantity
+          const newCart = [...safeCart];
+          newCart[existingItemIndex] = {
+            ...newCart[existingItemIndex],
+            quantity: newCart[existingItemIndex].quantity + 1
+          };
+          return newCart;
+        } else {
+          // If item doesn't exist, add it with quantity 1
+          return [...safeCart, { ...item, quantity: 1 }];
+        }
+      });
     };
+    
+    // Add item from menu grid
+    const handleAddToCartFromMenu = (item) => {
+      addToCart(item);
+    };
+    
+    // Add item from slider popup
+    const handleAddToCartFromSlider = () => {
+      const selectedItem = imageData[selectedSlide];
+      addToCart({
+        name: selectedItem.title,
+        imageUrl: selectedItem.url,
+        price: selectedItem.price,
+        description: selectedItem.description
+      });
+    };
+    
     // Image data with details
     const imageData = [
         {
@@ -311,9 +382,12 @@ const closePopup = () => {
                 ))}
             </Slide>
             </div>
-            <hr class="solid"></hr>
+            <hr className="solid"></hr>
             <div className="menu-container">
-              <ResponsiveGrid menuItems={menuItems} addToCart={addToCart}/>
+              <ResponsiveGrid 
+                menuItems={menuItems} 
+                addToCart={handleAddToCartFromMenu}
+              />
             </div>
             {/* Image Detail Popup */}
             {showPopup && (
@@ -332,7 +406,7 @@ const closePopup = () => {
                             color="primary"
                             size="large"
                             align="center"
-                            onClick={addToCart}
+                            onClick={handleAddToCartFromSlider}
                             sx={{ 
                               mt: 2,
                               display: 'block', // Make it a block element
