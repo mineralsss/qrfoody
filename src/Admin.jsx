@@ -360,73 +360,62 @@ function Admin() {
                     </Grid>
                     
                     <Grid item xs={12} sm={6}>
-                      <Box sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-around',
-                        px: 2
-                      }}>
-                        <Box sx={{ 
-                          textAlign: 'center',
-                          minWidth: '80px',
-                          mx: 1 // Add horizontal margin for better spacing
-                        }}>
-                          <Typography variant="overline" color="text.secondary">
-                            Orders
-                          </Typography>
-                          <Typography variant="h6">
-                            {filteredOrders.length}
-                          </Typography>
-                        </Box>
+                      <Grid container spacing={2}>
+                        <Grid item xs={6} sm={3}>
+                          <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="overline" color="text.secondary">
+                              Orders
+                            </Typography>
+                            <Typography variant="h6">
+                              {filteredOrders.length}
+                            </Typography>
+                          </Box>
+                        </Grid>
                         
-                        <Box sx={{ 
-                          textAlign: 'center',
-                          minWidth: '80px',
-                          mx: 1 // Add horizontal margin
-                        }}>
-                          <Typography variant="overline" color="text.secondary">
-                            Items Sold
-                          </Typography>
-                          <Typography variant="h6">
-                            {filteredOrders.reduce((total, order) => {
-                              return total + (order.items ? 
-                                order.items.reduce((sum, item) => sum + item.quantity, 0) : 0);
-                            }, 0)}
-                          </Typography>
-                        </Box>
+                        <Grid item xs={6} sm={3}>
+                          <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="overline" color="text.secondary">
+                              Items Sold
+                            </Typography>
+                            <Typography variant="h6">
+                              {filteredOrders.reduce((total, order) => {
+                                return total + (order.items ? 
+                                  order.items.reduce((sum, item) => sum + item.quantity, 0) : 0);
+                              }, 0)}
+                            </Typography>
+                          </Box>
+                        </Grid>
                         
-                        <Box sx={{ 
-                          textAlign: 'center',
-                          minWidth: '100px',
-                          mx: 1 // Add horizontal margin
-                        }}>
-                          <Typography variant="overline" color="text.secondary">
-                            Avg. Order
-                          </Typography>
-                          <Typography variant="h6">
-                            {filteredOrders.length > 0 ? 
-                              Math.round(totalRevenue / filteredOrders.length).toLocaleString('de-DE') : 0} vnd
-                          </Typography>
-                        </Box>
+                        <Grid item xs={6} sm={3}>
+                          <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="overline" color="text.secondary">
+                              Avg. Order
+                            </Typography>
+                            <Typography variant="h6">
+                              {filteredOrders.length > 0 ? 
+                                Math.round(totalRevenue / filteredOrders.length).toLocaleString('de-DE') : 0} vnd
+                            </Typography>
+                          </Box>
+                        </Grid>
                         
-                        {/* New box for average completion time */}
-                        <Box sx={{ 
-                          textAlign: 'center',
-                          minWidth: '100px',
-                          mx: 1,
-                          borderLeft: '1px dashed rgba(0,0,0,0.1)', // Add separator
-                          pl: 2 // Padding left
-                        }}>
-                          <Typography variant="overline" color="text.secondary">
-                            Avg. Time
-                          </Typography>
-                          <Typography variant="h6" color={avgCompletionTime === 'N/A' ? 'text.secondary' : 'text.primary'}>
-                            {avgCompletionTime}
-                          </Typography>
-                          <Typography variant="caption" color="text.secondary">
-                            to complete
-                          </Typography>
-                        </Box>
-                      </Box>
+                        <Grid item xs={6} sm={3}>
+                          <Box sx={{ 
+                            textAlign: 'center',
+                            borderLeft: { xs: 'none', sm: '1px dashed rgba(0,0,0,0.1)' },
+                            pl: { xs: 0, sm: 2 }
+                          }}>
+                            <Typography variant="overline" color="text.secondary">
+                              Avg. Time
+                            </Typography>
+                            <Typography variant="h6" color={avgCompletionTime === 'N/A' ? 'text.secondary' : 'text.primary'}>
+                              {avgCompletionTime}
+                            </Typography>
+                            <Typography variant="caption" color="text.secondary">
+                              to complete
+                            </Typography>
+                          </Box>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </CardContent>
