@@ -137,11 +137,21 @@ function Admin() {
   // Update order status
   const updateOrderStatus = (orderToUpdate, newStatus) => {
     setOrders(currentOrders => {
-      return currentOrders.map(order => 
-        order.timestamp === orderToUpdate.timestamp
-          ? {...order, status: newStatus} 
-          : order
-      );
+      return currentOrders.map(order => {
+        if (order.timestamp === orderToUpdate.timestamp) {
+          const updatedOrder = {...order, status: newStatus};
+          
+          // Add timestamp for the status change
+          if (newStatus === 'in-progress') {
+            updatedOrder.inProgressTimestamp = new Date().toISOString();
+          } else if (newStatus === 'completed') {
+            updatedOrder.completedTimestamp = new Date().toISOString();
+          }
+          
+          return updatedOrder;
+        }
+        return order;
+      });
     });
   };
   
@@ -191,17 +201,19 @@ function Admin() {
 
   // Add this new function after your other utility functions (before the return statement)
   const calculateAverageCompletionTime = (ordersList) => {
-    // Filter to only completed orders
-    const completedOrders = ordersList.filter(order => order.status === 'completed');
+    // Filter to only completed orders that have both timestamps
+    const completedOrders = ordersList.filter(
+      order => order.status === 'completed' && order.inProgressTimestamp && order.completedTimestamp
+    );
     
     if (completedOrders.length === 0) return 'N/A';
     
-    // For each completed order, calculate how long ago it was placed
+    // For each completed order, calculate how long it took to prepare
     const totalMinutes = completedOrders.reduce((sum, order) => {
       try {
-        const orderTime = new Date(order.timestamp).getTime();
-        const now = Date.now();
-        const diffMinutes = Math.floor((now - orderTime) / 60000);
+        const startTime = new Date(order.inProgressTimestamp).getTime();
+        const endTime = new Date(order.completedTimestamp).getTime();
+        const diffMinutes = Math.floor((endTime - startTime) / 60000);
         return sum + diffMinutes;
       } catch (e) {
         return sum;
