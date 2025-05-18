@@ -12,10 +12,10 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Landing />} />
+        <Route path="/" element={<Mainpage />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admin" element={<Admin />} />
-        <Route path="/mainpage" element={<Mainpage />} />
+        <Route path="/landing" element={<Landing />} />
         {/* Add more routes as needed */}
       </Routes>
     </BrowserRouter>

@@ -137,7 +137,12 @@ function Checkout() {
   
   // Go back to menu
   const goBack = () => {
-    navigate('/');
+    navigate('/landing');
+  };
+
+  // Add a function to navigate to the admin page
+  const goToAdmin = () => {
+    navigate('/admin');
   };
 
   // Add these functions inside your Checkout component
@@ -171,18 +176,27 @@ function Checkout() {
         {orderPlaced ? (
           <Box sx={{ textAlign: 'center', py: 8 }}>
             <Typography variant="h5" sx={{ mb: 2, color: 'success.main' }}>
-              Order Placed Successfully!
+              Đặt Hàng Thành Công!
             </Typography>
             <Typography variant="body1" sx={{ mb: 4 }}>
-              Your order has been sent to the kitchen.
+              Đơn hàng của bạn đã được gửi tới nhà bếp.
             </Typography>
-            <Button 
-              variant="contained" 
-              color="primary"
-              onClick={goBack}
-            >
-              Back to Menu
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+              <Button 
+                variant="contained" 
+                color="primary"
+                onClick={goBack}
+              >
+                Trở Về Thực Đơn
+              </Button>
+              <Button 
+                variant="outlined" 
+                color="secondary"
+                onClick={goToAdmin}
+              >
+                Xem Trang Quản Lý
+              </Button>
+            </Box>
           </Box>
         ) : (
           <>
@@ -191,21 +205,21 @@ function Checkout() {
                 <ArrowBackIcon />
               </IconButton>
               <Typography variant="h4" component="h1">
-                Your Cart
+                Giỏ Hàng Của Bạn
               </Typography>
             </Box>
             
             {cart.length === 0 ? (
               <Box sx={{ textAlign: 'center', py: 8 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>
-                  Your cart is empty
+                  Giỏ hàng của bạn trống
                 </Typography>
                 <Button 
                   variant="contained" 
                   color="primary"
                   onClick={goBack}
                 >
-                  Back to Menu
+                  Trở Về Thực Đơn
                 </Button>
               </Box>
             ) : (
@@ -287,7 +301,7 @@ function Checkout() {
                 
                 <Box sx={{ mt: 4, p: 2, bgcolor: 'background.paper', borderRadius: 1 }}>
                   <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
-                    Total: {total.toLocaleString('de-DE')} vnd
+                    Tổng Cộng: {total.toLocaleString('de-DE')} vnd
                   </Typography>
 
                 </Box>
@@ -299,7 +313,7 @@ function Checkout() {
                     size="large"
                     onClick={handlePlaceOrder} // Connect the function
                   >
-                    Place Order
+                    Đặt Hàng
                   </Button>
 
               </>
@@ -309,13 +323,13 @@ function Checkout() {
         
         {/* Add this at the bottom of your component, before the final closing tags */}
         <Dialog open={noteDialogOpen} onClose={() => setNoteDialogOpen(false)} maxWidth="sm" fullWidth>
-          <DialogTitle>Special Instructions</DialogTitle>
+          <DialogTitle>Yêu Cầu Đặc Biệt</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
               margin="dense"
               id="note"
-              label="Add any special requests for this item"
+              label="Thêm yêu cầu đặc biệt cho món này"
               type="text"
               fullWidth
               multiline
@@ -327,10 +341,10 @@ function Checkout() {
           </DialogContent>
           <DialogActions>
             <Button onClick={() => setNoteDialogOpen(false)}>
-              Cancel
+              Hủy
             </Button>
             <Button onClick={saveNote} variant="contained" color="primary">
-              Save
+              Lưu
             </Button>
           </DialogActions>
         </Dialog>

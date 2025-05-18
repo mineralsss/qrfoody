@@ -166,20 +166,35 @@ function Admin() {
     }
   };
   
-  // Calculate time elapsed since order was placed
+  // Update time elapsed function to use Vietnamese
   const getTimeElapsed = (timestamp) => {
     try {
       const orderTime = new Date(timestamp).getTime();
       const now = Date.now();
       const diffMinutes = Math.floor((now - orderTime) / 60000);
       
-      if (diffMinutes < 1) return 'Just now';
-      if (diffMinutes === 1) return '1 minute ago';
-      return `${diffMinutes} minutes ago`;
+      if (diffMinutes < 1) return 'Vừa xong';
+      if (diffMinutes === 1) return '1 phút trước';
+      return `${diffMinutes} phút trước`;
     } catch (e) {
-      return "Unknown";
+      return "Không rõ";
     }
   };
+  
+  // Calculate time elapsed since order was placed
+  // const getTimeElapsed = (timestamp) => {
+  //   try {
+  //     const orderTime = new Date(timestamp).getTime();
+  //     const now = Date.now();
+  //     const diffMinutes = Math.floor((now - orderTime) / 60000);
+      
+  //     if (diffMinutes < 1) return 'Just now';
+  //     if (diffMinutes === 1) return '1 minute ago';
+  //     return `${diffMinutes} minutes ago`;
+  //   } catch (e) {
+  //     return "Unknown";
+  //   }
+  // };
   
   // Get appropriate status color
   const getStatusColor = (status) => {
@@ -223,13 +238,13 @@ function Admin() {
     
     const avgMinutes = Math.round(totalMinutes / completedOrders.length);
     
-    // Format nicely
+    // Format nicely in Vietnamese
     if (avgMinutes < 60) {
-      return `${avgMinutes} min`;
+      return `${avgMinutes} phút`;
     } else {
       const hours = Math.floor(avgMinutes / 60);
       const mins = avgMinutes % 60;
-      return `${hours}h ${mins}m`;
+      return `${hours}h ${mins}p`;
     }
   };
 
@@ -241,7 +256,7 @@ function Admin() {
       <Container maxWidth={false}>
         <Box sx={{ py: 3 }}>
           <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-            Kitchen Dashboard
+            Quản Lý Nhà Bếp
           </Typography>
           
           <Paper sx={{ width: '100%', mb: 3 }}>
@@ -255,32 +270,32 @@ function Admin() {
               <Tab 
                 label={
                   <Badge badgeContent={newOrdersCount} color="error" max={99}>
-                    New Orders
+                    Đơn Mới
                   </Badge>
                 } 
               />
               <Tab 
                 label={
                   <Badge badgeContent={inProgressCount} color="warning" max={99}>
-                    In Progress
+                    Đang Chế Biến
                   </Badge>
                 } 
               />
               <Tab 
                 label={
                   <Badge badgeContent={completedCount} color="success" max={99}>
-                    Completed
+                    Hoàn Thành
                   </Badge>
                 } 
               />
-              <Tab label="All Orders" />
+              <Tab label="Tất Cả Đơn Hàng" />
             </Tabs>
           </Paper>
           
           {activeTab === 3 && (
             <Paper sx={{ p: 2, mb: 3 }}>
               <Typography variant="subtitle1" fontWeight="medium" gutterBottom>
-                Filter by Date
+                Lọc Theo Ngày
               </Typography>
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
                 <Button 
@@ -289,7 +304,7 @@ function Admin() {
                   size="small"
                   onClick={() => setDateFilter('all')}
                 >
-                  All Time
+                  Tất Cả
                 </Button>
                 <Button 
                   variant={dateFilter === 'today' ? "contained" : "outlined"} 
@@ -297,7 +312,7 @@ function Admin() {
                   size="small"
                   onClick={() => setDateFilter('today')}
                 >
-                  Today
+                  Hôm Nay
                 </Button>
                 <Button 
                   variant={dateFilter === 'yesterday' ? "contained" : "outlined"} 
@@ -305,7 +320,7 @@ function Admin() {
                   size="small"
                   onClick={() => setDateFilter('yesterday')}
                 >
-                  Yesterday
+                  Hôm Qua
                 </Button>
                 <Button 
                   variant={dateFilter === 'thisWeek' ? "contained" : "outlined"} 
@@ -313,7 +328,7 @@ function Admin() {
                   size="small"
                   onClick={() => setDateFilter('thisWeek')}
                 >
-                  This Week
+                  Tuần Này
                 </Button>
                 <Button 
                   variant={dateFilter === 'custom' ? "contained" : "outlined"} 
@@ -321,7 +336,7 @@ function Admin() {
                   size="small"
                   onClick={() => setDateFilter('custom')}
                 >
-                  Custom Date
+                  Ngày Tùy Chọn
                 </Button>
                 
                 {dateFilter === 'custom' && (
@@ -340,10 +355,10 @@ function Admin() {
               
               {dateFilter !== 'all' && (
                 <Box sx={{ mt: 1, fontSize: '0.9rem', color: 'text.secondary' }}>
-                  {dateFilter === 'today' && "Showing orders from today"}
-                  {dateFilter === 'yesterday' && "Showing orders from yesterday"}
-                  {dateFilter === 'thisWeek' && "Showing orders from this week"}
-                  {dateFilter === 'custom' && customDate && `Showing orders from ${new Date(customDate).toLocaleDateString()}`}
+                  {dateFilter === 'today' && "Hiển thị đơn hàng trong ngày hôm nay"}
+                  {dateFilter === 'yesterday' && "Hiển thị đơn hàng từ hôm qua"}
+                  {dateFilter === 'thisWeek' && "Hiển thị đơn hàng trong tuần này"}
+                  {dateFilter === 'custom' && customDate && `Hiển thị đơn hàng vào ngày ${new Date(customDate).toLocaleDateString()}`}
                 </Box>
               )}
             </Paper>
@@ -357,17 +372,17 @@ function Admin() {
                     <Grid item xs={12} sm={6}>
                       <Box>
                         <Typography variant="overline" color="text.secondary">
-                          Revenue Summary
+                          Tổng Doanh Thu
                         </Typography>
                         <Typography variant="h4" color="primary" fontWeight="bold">
                           {totalRevenue.toLocaleString('de-DE')} vnd
                         </Typography>
                         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                          {dateFilter === 'all' ? 'All time' : 
-                          dateFilter === 'today' ? 'Today' :
-                          dateFilter === 'yesterday' ? 'Yesterday' :
-                          dateFilter === 'thisWeek' ? 'This week' :
-                          dateFilter === 'custom' ? `On ${new Date(customDate).toLocaleDateString()}` : ''}
+                          {dateFilter === 'all' ? 'Tất cả thời gian' : 
+                          dateFilter === 'today' ? 'Hôm nay' :
+                          dateFilter === 'yesterday' ? 'Hôm qua' :
+                          dateFilter === 'thisWeek' ? 'Tuần này' :
+                          dateFilter === 'custom' ? `Ngày ${new Date(customDate).toLocaleDateString()}` : ''}
                         </Typography>
                       </Box>
                     </Grid>
@@ -377,7 +392,7 @@ function Admin() {
                         <Grid item xs={6} sm={3}>
                           <Box sx={{ textAlign: 'center' }}>
                             <Typography variant="overline" color="text.secondary">
-                              Orders
+                              Đơn Hàng
                             </Typography>
                             <Typography variant="h6">
                               {filteredOrders.length}
@@ -388,7 +403,7 @@ function Admin() {
                         <Grid item xs={6} sm={3}>
                           <Box sx={{ textAlign: 'center' }}>
                             <Typography variant="overline" color="text.secondary">
-                              Items Sold
+                              Món Đã Bán
                             </Typography>
                             <Typography variant="h6">
                               {filteredOrders.reduce((total, order) => {
@@ -402,7 +417,7 @@ function Admin() {
                         <Grid item xs={6} sm={3}>
                           <Box sx={{ textAlign: 'center' }}>
                             <Typography variant="overline" color="text.secondary">
-                              Avg. Order
+                              Giá Trị TB
                             </Typography>
                             <Typography variant="h6">
                               {filteredOrders.length > 0 ? 
@@ -418,13 +433,13 @@ function Admin() {
                             pl: { xs: 0, sm: 2 }
                           }}>
                             <Typography variant="overline" color="text.secondary">
-                              Avg. Time
+                              Thời Gian TB
                             </Typography>
                             <Typography variant="h6" color={avgCompletionTime === 'N/A' ? 'text.secondary' : 'text.primary'}>
                               {avgCompletionTime}
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                              to complete
+                              để hoàn thành
                             </Typography>
                           </Box>
                         </Grid>
@@ -440,8 +455,8 @@ function Admin() {
             <Box sx={{ textAlign: 'center', py: 5 }}>
               <Typography variant="h6" color="text.secondary">
                 {activeTab === 3 && dateFilter !== 'all' 
-                  ? 'No orders found for the selected date' 
-                  : 'No orders in this category'}
+                  ? 'Không tìm thấy đơn hàng cho ngày đã chọn' 
+                  : 'Không có đơn hàng trong mục này'}
               </Typography>
             </Box>
           ) : (
@@ -550,10 +565,10 @@ function Admin() {
                         borderTop: '1px dashed rgba(0,0,0,0.1)' 
                       }}>
                         <Typography variant="body2" color="text.secondary">
-                          Order time: {formatTime(order.timestamp)}
+                          Thời gian: {formatTime(order.timestamp)}
                         </Typography>
                         <Typography variant="body2" fontWeight="bold">
-                          Items: {order.items ? order.items.reduce((sum, item) => sum + item.quantity, 0) : 0}
+                          Món: {order.items ? order.items.reduce((sum, item) => sum + item.quantity, 0) : 0}
                         </Typography>
                       </Box>
                     </CardContent>
@@ -573,7 +588,7 @@ function Admin() {
                             }
                           }}
                         >
-                          Start Prepping
+                          Bắt Đầu Chế Biến
                         </Button>
                       )}
                       
@@ -584,7 +599,7 @@ function Admin() {
                           color="success"
                           onClick={() => updateOrderStatus(order, 'completed')}
                         >
-                          Mark Completed
+                          Đã Hoàn Thành
                         </Button>
                       )}
                       
@@ -594,7 +609,7 @@ function Admin() {
                           variant="outlined"
                           onClick={() => updateOrderStatus(order, 'new')}
                         >
-                          Reopen Order
+                          Mở Lại Đơn
                         </Button>
                       )}
                     </CardActions>
@@ -608,9 +623,9 @@ function Admin() {
           <Box sx={{ mt: 4, textAlign: 'center' }}>
             <Button 
               variant="outlined"
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/landing')}
             >
-              Back to Menu
+              Quay Lại Thực Đơn
             </Button>
           </Box>
         </Box>
@@ -623,7 +638,7 @@ function Admin() {
         fullWidth
       >
         <DialogTitle>
-          Special Instructions for {currentItemName}
+          Yêu Cầu Đặc Biệt cho {currentItemName}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ 
@@ -634,7 +649,7 @@ function Admin() {
             mt: 1
           }}>
             <Typography variant="body1">
-              {currentNote || "No special instructions provided."}
+              {currentNote || "Không có yêu cầu đặc biệt."}
             </Typography>
           </Box>
           
@@ -642,17 +657,17 @@ function Admin() {
           <TextField
             margin="normal"
             id="kitchen-note"
-            label="Add kitchen note (optional)"
+            label="Thêm ghi chú nhà bếp (tùy chọn)"
             fullWidth
             multiline
             rows={2}
             variant="outlined"
-            placeholder="Add instructions for staff or response to customer request"
+            placeholder="Thêm hướng dẫn cho nhân viên hoặc phản hồi yêu cầu của khách hàng"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setNoteDialogOpen(false)} color="primary">
-            Close
+            Đóng
           </Button>
         </DialogActions>
       </Dialog>
