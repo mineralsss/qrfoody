@@ -1,0 +1,90 @@
+.main-page {
+  font-family: sans-serif;
+  text-align: center;
+  padding: 5%; /* Changed from 20px */
+}
+
+.hero-section {
+  background-color: #f0f0f0;
+  padding: 8% 5%; /* Changed from 40px 20px */
+  margin-bottom: 5%; /* Changed from 30px */
+}
+
+.hero-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 2%; /* Changed from 10px */
+}
+
+.product-introduction,
+.about-us {
+  margin-bottom: 5%; /* Changed from 30px */
+  padding: 0 15%;
+}
+
+.product-introduction h2,
+.about-us h2 {
+  font-size: 1.8em;
+  margin-bottom: 3%; /* Changed from 15px */
+  color: #333;
+}
+
+.product-introduction p,
+.about-us p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+}
+
+.footer {
+  margin-top: 8%; /* Changed from 40px */
+  padding-top: 5%; /* Changed from 20px */
+  border-top: 1px solid #eee; /* Kept as px for border */
+  font-size: 0.9em;
+  color: #777;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hero-section h1 {
+    font-size: 2em;
+  }
+
+  .product-introduction h2,
+  .about-us h2 {
+    font-size: 1.5em;
+  }
+
+  .product-introduction p,
+  .about-us p {
+    font-size: 1em;
+  }
+
+  .product-introduction,
+  .about-us {
+    padding: 0 5%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-page {
+    padding: 3%; /* Changed from 10px */
+  }
+
+  .hero-section {
+    padding: 6% 3%; /* Changed from 30px 10px */
+  }
+
+  .hero-section h1 {
+    font-size: 1.8em;
+  }
+
+  .product-introduction h2,
+  .about-us h2 {
+    font-size: 1.3em;
+  }
+
+  .product-introduction p,
+  .about-us p {
+    font-size: 0.9em;
+  }
+}
