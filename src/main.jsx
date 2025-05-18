@@ -8,8 +8,6 @@ import Mainpage from './Mainpage.jsx'
 import { Analytics } from "@vercel/analytics/react"
 import { SpeedInsights } from "@vercel/speed-insights/react"
 
-
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
@@ -21,6 +19,7 @@ createRoot(document.getElementById('root')).render(
         {/* Add more routes as needed */}
       </Routes>
     </BrowserRouter>
+
     <Analytics/>
     <SpeedInsights/>
   </StrictMode>,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useLocalStorageValue } from '@react-hookz/web';
 import Popup from 'reactjs-popup';
 import './Landing.css';
@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid2';
 import CssBaseline from '@mui/material/CssBaseline';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Badge from '@mui/material/Badge';
 import { styled as muiStyled } from '@mui/material/styles';
@@ -21,17 +21,6 @@ import Fab from '@mui/material/Fab';
 import { useNavigate } from 'react-router-dom'; 
 
 
-
-const theme = createTheme({
-    palette: {
-      primary: {
-        main: "#ff5722", // Change primary color
-      },
-      secondary: {
-        main: "#4caf50", // Change secondary color
-      },
-    },
-  });
 
 const StyledBadge = muiStyled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -164,39 +153,52 @@ function ResponsiveGrid({menuItems, addToCart}) {
   );
 }
 
-function ButtonAppBar() {
-    return (
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="flexible">
-            <Toolbar>
-              <IconButton
-                size="large"
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                sx={{ mr: 2 }}
-              >
-              </IconButton>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align='left'>
-                <strong>Mune</strong> QR
-              </Typography>
-              <Typography 
-                variant="subtitle1" 
-                sx={{ 
-                  bgcolor: 'rgba(255,255,255,0.2)', 
-                  px: 2, 
-                  py: 0.5, 
-                  borderRadius: 1,
-                  fontWeight: 'bold'
-                }}
-              >
-                Table 2
-              </Typography>
-            </Toolbar>
-          </AppBar>
-        </Box>
-      );
 
+function ButtonAppBar() {  
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#81cd28",
+      },
+      secondary: {
+        main: "#4caf50",
+      },
+    },
+  });
+  
+  return (
+    <MuiThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="flexible">
+          <Toolbar>
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+            >
+            </IconButton>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align='left'>
+              <strong>Mune</strong> QR
+            </Typography>
+            <Typography 
+              variant="subtitle1" 
+              sx={{ 
+                bgcolor: 'rgba(255,255,255,0.2)', 
+                px: 2, 
+                py: 0.5, 
+                borderRadius: 1,
+                fontWeight: 'bold'
+              }}
+            >
+              Table 2
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Box>
+    </MuiThemeProvider>
+  );
 }
 
 function HideOnScroll(props) {
@@ -335,7 +337,6 @@ const closePopup = () => {
 
             <React.Fragment>
             <CssBaseline/>
-            <ThemeProvider theme={theme}>
             <HideOnScroll>
                 <ButtonAppBar />
             </HideOnScroll>
@@ -419,7 +420,6 @@ const closePopup = () => {
                 </div>
             )}
               <CartButton itemCount={cartItemCount} />
-            </ThemeProvider>
         </React.Fragment></>
     );
     

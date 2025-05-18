@@ -28,15 +28,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 // Theme for admin interface
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#2196f3", // Blue for admin
+      main: "#81cd28", // Changed from blue (#2196f3) to green to match other pages
     },
     secondary: {
-      main: "#ff5722", // Orange from customer UI
+      main: "#4caf50", // Updated to match other pages
     },
     success: {
       main: "#4caf50", // Green for completed orders
@@ -560,12 +561,19 @@ function Admin() {
                     <CardActions sx={{ justifyContent: 'flex-end', p: 2, pt: 0 }}>
                       {order.status === 'new' && (
                         <Button 
-                          size="small"
                           variant="contained"
-                          color="warning"
-                          onClick={() => updateOrderStatus(order, 'in-progress')}
+                          size="small"
+                          startIcon={<PlayArrowIcon />}
+                          onClick={() => updateOrderStatus(order, "in-progress")}
+                          sx={{ 
+                            mt: 1,
+                            backgroundColor: "#81cd28", // Explicitly set background color
+                            '&:hover': {
+                              backgroundColor: "#6db122" // Slightly darker shade for hover state
+                            }
+                          }}
                         >
-                          Start Preparing
+                          Start Prepping
                         </Button>
                       )}
                       

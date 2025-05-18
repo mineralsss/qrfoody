@@ -25,7 +25,7 @@ import TextField from '@mui/material/TextField';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#ff5722",
+      main: "#81cd28", // Changed from #ff5722 to match Landing.jsx
     },
     secondary: {
       main: "#4caf50",
@@ -230,10 +230,10 @@ function Checkout() {
                           variant="body2" 
                           sx={{ 
                             mt: 1, 
-                            bgcolor: 'rgba(255,87,34,0.05)', 
+                            bgcolor: 'rgba(129,205,40,0.05)', // Changed from rgba(255,87,34,0.05)
                             p: 1, 
                             borderRadius: 1,
-                            borderLeft: '3px solid #ff5722',
+                            borderLeft: '3px solid #81cd28', // Changed from #ff5722
                             fontStyle: 'italic'
                           }}
                         >

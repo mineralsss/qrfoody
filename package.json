@@ -12,7 +12,7 @@
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
-        "@mui/icons-material": "^6.4.7",
+        "@mui/icons-material": "^6.4.11",
         "@react-hookz/web": "^25.1.0",
         "@tailwindcss/vite": "^4.0.12",
         "@vercel/analytics": "^1.5.0",
