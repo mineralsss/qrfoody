@@ -178,7 +178,7 @@ function ButtonAppBar() {
               >
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }} align='left'>
-                <strong>QR</strong> Foody
+                <strong>Mune</strong> QR
               </Typography>
               <Typography 
                 variant="subtitle1" 
